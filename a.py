@@ -13,6 +13,10 @@ destination_folder = 'extracted/'
 # Ensure the destination folder exists
 os.makedirs(destination_folder, exist_ok=True)
 
+# Define the desired width and height for the extracted faces
+desired_width = 100
+desired_height = 100
+
 # Iterate over image files in the source folder
 for filename in os.listdir(source_folder):
     if filename.endswith(('.jpg', '.jpeg', '.png')):  # Check if the file is an image
@@ -31,8 +35,11 @@ for filename in os.listdir(source_folder):
             # Extract the face region
             face = image[y:y+h, x:x+w]
 
-            # Save the extracted face to the destination folder
-            destination_path = os.path.join(destination_folder, f'{filename.split(".")[0]}_face_{i}.jpg')
-            cv2.imwrite(destination_path, face, [cv2.IMWRITE_JPEG_QUALITY, 100])
+            # Resize the extracted face to the desired size
+            resized_face = cv2.resize(face, (desired_width, desired_height))
 
-print("Faces extracted and saved successfully!")
+            # Save the resized extracted face to the destination folder
+            destination_path = os.path.join(destination_folder, f'{filename.split(".")[0]}_face_{i}.jpg')
+            cv2.imwrite(destination_path, resized_face, [cv2.IMWRITE_JPEG_QUALITY, 100])
+
+print("Faces extracted, resized, and saved successfully!")
